@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+using namespace std;
+int closestPairSum(vector<int>& arr) {
+ sort(arr.begin(), arr.end());
+ int left = 0, right = arr.size() - 1;
+ int closestSum = INT_MAX;
+ while (left < right) {
+ int sum = arr[left] + arr[right];
+ if (abs(sum) < abs(closestSum)) {
+ closestSum = sum;
+ } else if (abs(sum) == abs(closestSum) && sum > closestSum) {
+ closestSum = sum; // If same absolute value, take the larger sum
+ }
+ if (sum < 0) {
+ left++;
+ } else {
+ right--;
+ }
+ }
+ return closestSum;
+}
+int main() {
+ int n;
+ cout << "Enter the number of elements: ";
+ cin >> n;
+ vector<int> arr(n);
+ cout << "Enter the elements of the array: ";
+ for (int i = 0; i < n; i++) {
+ cin >> arr[i];
+ }
+ cout << "Sum closest to zero: " << closestPairSum(arr) << endl;
+ return 0;
+}
