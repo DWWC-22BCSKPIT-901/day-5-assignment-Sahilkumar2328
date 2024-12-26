@@ -1,0 +1,24 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+const int MOD = 1e9 + 7;
+class FenwickTree {
+ vector<int> tree;
+public:
+ FenwickTree(int size) : tree(size + 1, 0) {}
+ void update(int idx, int value) {
+ while (idx < tree.size()) {
+ tree[idx] += value;
+ idx += idx & -idx;
+ }
+ }
+ int query(int idx) {
+ int sum = 0;
+ while (idx > 0) {
+ sum += tree[idx];
+ idx -= idx & -idx;
+ }
+ return sum;
+ }
+};
+OUTPU
