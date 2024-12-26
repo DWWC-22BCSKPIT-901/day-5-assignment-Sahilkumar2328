@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+const int MOD = 1e9 + 7;
+class FenwickTree {
+ vector<int> tree;
+public:
+ FenwickTree(int size) : tree(size + 1, 0) {}
+ void update(int idx, int value) {
+ while (idx < tree.size()) {
+ tree[idx] += value;
+ idx += idx & -idx;
+ }
+ }
+ int query(int idx) {
+ int sum = 0;
+ while (idx > 0) {
+ sum += tree[idx];
+ idx -= idx & -idx;
+ }
+ return sum;
+ }
+};
+int createSortedArray(vector<int>& instructions) {
+ int maxVal = 100000;
+ FenwickTree fenwick(maxVal);
+ long long cost = 0;
+ for (int i = 0; i < instructions.size(); i++) {
+ int num = instructions[i];
+ int less = fenwick.query(num - 1);
+ int greater = i - fenwick.query(num);
+ cost = (cost + min(less, greater)) % MOD;
+ fenwick.update(num, 1);
+ }
+ return cost;
+}
+int main() {
+ int n;
+ cin >> n;
+ vector<int> instructions(n);
+ for (int i = 0; i < n; i++) {
+ cin >> instructions[i];
+ }
+ cout << createSortedArray(instructions) << endl;
+ return 0;
+}
